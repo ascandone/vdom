@@ -35,7 +35,7 @@ export class Vdom {
       if (typeof newVdom === "string") {
         // ##PATCH
         nodeParent.childNodes[index].textContent = newVdom;
-      } else if (typeof lastVdom === "string" && typeof newVdom !== "string") {
+      } else if (typeof newVdom !== "string") {
         const node = Vdom._newNode(newVdom);
         nodeParent.childNodes[index] = node;
       } else if (lastVdom.nodeName === newVdom.nodeName) {
@@ -53,9 +53,6 @@ export class Vdom {
             delete node[propName];
           }
         }
-      } else {
-        const node = Vdom._newNode(newVdom);
-        nodeParent.childNodes[index] = node;
       }
     } else if (lastVdom !== undefined && newVdom === undefined) {
       throw new Error("TODO removing node");
