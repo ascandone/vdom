@@ -63,3 +63,19 @@ test("components", () => {
     ],
   });
 });
+
+test("undefined should render empty text", () => {
+  expect(<div>{undefined}</div>).toEqual({
+    nodeName: "div",
+    props: {},
+    children: [""],
+  });
+});
+
+test("null should render empty text", () => {
+  expect(<div>{null}</div>).toEqual({
+    nodeName: "div",
+    props: {},
+    children: [""],
+  });
+});
