@@ -27,6 +27,10 @@ export class Vdom {
   }
 
   _renderRec(nodeParent, index, lastVdom, newVdom) {
+    if (lastVdom === newVdom) {
+      return;
+    }
+
     // Creating new node
     if (lastVdom === undefined && newVdom !== undefined) {
       const node = Vdom._newNode(newVdom);
