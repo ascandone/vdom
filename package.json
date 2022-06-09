@@ -9,6 +9,7 @@
     "test": "vitest"
   },
   "devDependencies": {
+    "c8": "^7.11.3",
     "happy-dom": "^5.2.0",
     "prettier": "^2.6.2",
     "vite": "^2.9.9",

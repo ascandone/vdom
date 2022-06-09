@@ -33,9 +33,14 @@ export class Vdom {
       nodeParent.appendChild(node);
     } else if (lastVdom !== undefined && newVdom !== undefined) {
       if (typeof newVdom === "string") {
-        // ##PATCH
-        nodeParent.childNodes[index].textContent = newVdom;
-      } else if (typeof newVdom !== "string") {
+        const node = Vdom._newNode(newVdom);
+        nodeParent.childNodes[index].replaceWith(node);
+      } else if (typeof lastVdom === "string") {
+        // TODO simplify condition
+        const node = Vdom._newNode(newVdom);
+        nodeParent.childNodes[index].replaceWith(node);
+      } else if (lastVdom.nodeName !== newVdom.nodeName) {
+        // TODO simplify condition
         const node = Vdom._newNode(newVdom);
         nodeParent.childNodes[index].replaceWith(node);
       } else if (lastVdom.nodeName === newVdom.nodeName) {
@@ -53,9 +58,23 @@ export class Vdom {
             delete node[propName];
           }
         }
+
+        const longestIndex = Math.max(
+          lastVdom.children.length,
+          newVdom.children.length
+        );
+
+        for (let subIndex = longestIndex; subIndex >= 0; subIndex--) {
+          this._renderRec(
+            node,
+            subIndex,
+            lastVdom.children[subIndex],
+            newVdom.children[subIndex]
+          );
+        }
       }
     } else if (lastVdom !== undefined && newVdom === undefined) {
-      throw new Error("TODO removing node");
+      nodeParent.removeChild(nodeParent.childNodes[index]);
     }
   }
 
