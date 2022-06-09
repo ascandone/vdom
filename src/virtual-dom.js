@@ -42,12 +42,18 @@ export class Vdom {
       } else if (typeof lastVdom !== "string" && typeof newVdom === "string") {
         throw new Error("TODO from regular node to string node");
       } else if (lastVdom.nodeName === newVdom.nodeName) {
+        const node = nodeParent.childNodes[index];
         for (const propName in newVdom.props) {
-          const node = nodeParent.childNodes[index];
-
           // ##PATCH
           if (lastVdom.props[propName] !== newVdom.props[propName]) {
             node[propName] = newVdom.props[propName];
+          }
+        }
+
+        for (const propName in lastVdom.props) {
+          // ##PATCH
+          if (!(propName in newVdom)) {
+            delete node[propName];
           }
         }
       } else {

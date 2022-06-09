@@ -93,4 +93,14 @@ describe("subsequent renders", () => {
 
     expect(root.childNodes[0].x).toEqual(42);
   });
+
+  test("same node, removed property", () => {
+    const root = document.createElement("div");
+
+    const vdom = new Vdom(root);
+    vdom.render(<div x={42}></div>);
+    vdom.render(<div></div>);
+
+    expect("x" in root.childNodes[0]).toBeFalsy();
+  });
 });
