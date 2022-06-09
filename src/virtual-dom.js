@@ -36,9 +36,8 @@ export class Vdom {
         // ##PATCH
         nodeParent.childNodes[index].textContent = newVdom;
       } else if (typeof lastVdom === "string" && typeof newVdom !== "string") {
-        const newNode = document.createElement(newVdom.nodeName);
-
-        nodeParent.childNodes[index] = newNode;
+        const node = Vdom._newNode(newVdom);
+        nodeParent.childNodes[index] = node;
       } else if (lastVdom.nodeName === newVdom.nodeName) {
         const node = nodeParent.childNodes[index];
         for (const propName in newVdom.props) {

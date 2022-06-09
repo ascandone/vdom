@@ -142,6 +142,6 @@ describe("subsequent renders", () => {
     vdom.render(<div x={43}></div>);
 
     expect(root.childNodes[0].nodeName).toEqual("DIV");
-    // expect(root.childNodes[0].x).toEqual(43);
+    expect(root.childNodes[0].x).toEqual(43);
   });
 });
