@@ -82,3 +82,15 @@ describe("initial render", () => {
     expect(root.childNodes[0].childNodes[0].x).toEqual(42);
   });
 });
+
+describe("subsequent renders", () => {
+  test("same node, new property", () => {
+    const root = document.createElement("div");
+
+    const vdom = new Vdom(root);
+    vdom.render(<div></div>);
+    vdom.render(<div x={42}></div>);
+
+    expect(root.childNodes[0].x).toEqual(42);
+  });
+});

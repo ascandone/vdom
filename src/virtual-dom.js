@@ -35,7 +35,24 @@ export class Vdom {
     if (lastVdom === undefined && newVdom !== undefined) {
       this._createNode(nodeParent, newVdom);
     } else if (lastVdom !== undefined && newVdom !== undefined) {
-      throw new Error("TODO editing node");
+      if (typeof lastVdom === "string" && typeof newVdom === "string") {
+        throw new Error("TODO editing string node");
+      } else if (typeof lastVdom === "string" && typeof newVdom !== "string") {
+        throw new Error("TODO from string node to regular node");
+      } else if (typeof lastVdom !== "string" && typeof newVdom === "string") {
+        throw new Error("TODO from regular node to string node");
+      } else if (lastVdom.nodeName === newVdom.nodeName) {
+        for (const propName in newVdom.props) {
+          const node = nodeParent.childNodes[index];
+
+          // ##PATCH
+          if (lastVdom.props[propName] !== newVdom.props[propName]) {
+            node[propName] = newVdom.props[propName];
+          }
+        }
+      } else {
+        throw new Error("TODO diffing different node");
+      }
     } else if (lastVdom !== undefined && newVdom === undefined) {
       throw new Error("TODO removing node");
     }
