@@ -22,3 +22,22 @@ test("misc", () => {
     ],
   });
 });
+
+test("array as children", () => {
+  const node = (
+    <ul>
+      {[<li>1</li>, <li>2</li>]}
+      <li>3</li>
+    </ul>
+  );
+
+  expect(node).toEqual({
+    nodeName: "ul",
+    props: {},
+    children: [
+      { nodeName: "li", props: {}, children: ["1"] },
+      { nodeName: "li", props: {}, children: ["2"] },
+      { nodeName: "li", props: {}, children: ["3"] },
+    ],
+  });
+});
