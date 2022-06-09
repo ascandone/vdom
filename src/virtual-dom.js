@@ -36,15 +36,11 @@ export class Vdom {
       const node = Vdom._newNode(newVdom);
       nodeParent.appendChild(node);
     } else if (lastVdom !== undefined && newVdom !== undefined) {
-      if (typeof newVdom === "string") {
-        const node = Vdom._newNode(newVdom);
-        nodeParent.childNodes[index].replaceWith(node);
-      } else if (typeof lastVdom === "string") {
-        // TODO simplify condition
-        const node = Vdom._newNode(newVdom);
-        nodeParent.childNodes[index].replaceWith(node);
-      } else if (lastVdom.nodeName !== newVdom.nodeName) {
-        // TODO simplify condition
+      if (
+        typeof newVdom === "string" ||
+        typeof lastVdom === "string" ||
+        lastVdom.nodeName !== newVdom.nodeName
+      ) {
         const node = Vdom._newNode(newVdom);
         nodeParent.childNodes[index].replaceWith(node);
       } else if (lastVdom.nodeName === newVdom.nodeName) {
