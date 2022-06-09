@@ -130,8 +130,9 @@ describe("subsequent renders", () => {
     const vdom = new Vdom(root);
     vdom.render(<div x={42}></div>);
     vdom.render(<div x={43}></div>);
+    vdom.render(<div x={44}></div>);
 
-    expect(root.childNodes[0].x).toEqual(43);
+    expect(root.childNodes[0].x).toEqual(44);
   });
 
   test("from text node to regular node", () => {
