@@ -9,7 +9,7 @@ describe("initial render", () => {
     const vdom = new Vdom(root);
 
     vdom.render("hello");
-    expect(root.childNodes[0].textContent).toBe("hello");
+    expect(root.firstChild.textContent).toBe("hello");
   });
 
   test("simple div", () => {
@@ -19,7 +19,7 @@ describe("initial render", () => {
 
     vdom.render(<div></div>);
 
-    expect(root.childNodes[0].nodeName).toEqual("DIV");
+    expect(root.firstChild.nodeName).toEqual("DIV");
   });
 
   test("simple div with number property", () => {
@@ -29,7 +29,7 @@ describe("initial render", () => {
 
     vdom.render(<div x={42}></div>);
 
-    expect(root.childNodes[0]["x"]).toEqual(42);
+    expect(root.firstChild["x"]).toEqual(42);
   });
 
   test("simple div with id attribute", () => {
@@ -39,7 +39,7 @@ describe("initial render", () => {
 
     vdom.render(<div id="my-id"></div>);
 
-    expect(root.childNodes[0].getAttribute("id")).toEqual("my-id");
+    expect(root.firstChild.getAttribute("id")).toEqual("my-id");
   });
 
   test("simple div with text children", () => {
@@ -49,7 +49,7 @@ describe("initial render", () => {
 
     vdom.render(<div>hello</div>);
 
-    expect(root.childNodes[0].childNodes[0].textContent).toEqual("hello");
+    expect(root.firstChild.childNodes[0].textContent).toEqual("hello");
   });
 
   test("simple div with two children", () => {
@@ -64,8 +64,8 @@ describe("initial render", () => {
       </div>
     );
 
-    expect(root.childNodes[0].childNodes[0].nodeName).toEqual("BUTTON");
-    expect(root.childNodes[0].childNodes[1].nodeName).toEqual("HR");
+    expect(root.firstChild.childNodes[0].nodeName).toEqual("BUTTON");
+    expect(root.firstChild.childNodes[1].nodeName).toEqual("HR");
   });
 
   test("simple div with child with properties", () => {
@@ -79,7 +79,7 @@ describe("initial render", () => {
       </div>
     );
 
-    expect(root.childNodes[0].childNodes[0].x).toEqual(42);
+    expect(root.firstChild.childNodes[0].x).toEqual(42);
   });
 });
 
@@ -91,7 +91,7 @@ describe("subsequent renders", () => {
     vdom.render("first");
     vdom.render("second");
 
-    expect(root.childNodes[0].textContent).toBe("second");
+    expect(root.firstChild.textContent).toBe("second");
   });
 
   test("from regular node to string node", () => {
@@ -101,7 +101,7 @@ describe("subsequent renders", () => {
     vdom.render(<div>hello world</div>);
     vdom.render("second");
 
-    expect(root.childNodes[0].textContent).toBe("second");
+    expect(root.firstChild.textContent).toBe("second");
   });
 
   test("same node, new property", () => {
@@ -111,7 +111,7 @@ describe("subsequent renders", () => {
     vdom.render(<div></div>);
     vdom.render(<div x={42}></div>);
 
-    expect(root.childNodes[0].x).toEqual(42);
+    expect(root.firstChild.x).toEqual(42);
   });
 
   test("same node, removed property", () => {
@@ -121,7 +121,7 @@ describe("subsequent renders", () => {
     vdom.render(<div x={42}></div>);
     vdom.render(<div></div>);
 
-    expect("x" in root.childNodes[0]).toBeFalsy();
+    expect("x" in root.firstChild).toBeFalsy();
   });
 
   test("same node, different property value", () => {
@@ -132,7 +132,7 @@ describe("subsequent renders", () => {
     vdom.render(<div x={43}></div>);
     vdom.render(<div x={44}></div>);
 
-    expect(root.childNodes[0].x).toEqual(44);
+    expect(root.firstChild.x).toEqual(44);
   });
 
   test("from text node to regular node", () => {
@@ -142,8 +142,8 @@ describe("subsequent renders", () => {
     vdom.render("first");
     vdom.render(<div x={43}></div>);
 
-    expect(root.childNodes[0].nodeName).toEqual("DIV");
-    expect(root.childNodes[0].x).toEqual(43);
+    expect(root.firstChild.nodeName).toEqual("DIV");
+    expect(root.firstChild.x).toEqual(43);
   });
 
   test("two different nodes", () => {
@@ -153,9 +153,9 @@ describe("subsequent renders", () => {
     vdom.render(<div x={100}></div>);
     vdom.render(<button y={200}></button>);
 
-    expect(root.childNodes[0].nodeName).toEqual("BUTTON");
-    expect("x" in root.childNodes[0]).toBeFalsy();
-    expect(root.childNodes[0].y).toEqual(200);
+    expect(root.firstChild.nodeName).toEqual("BUTTON");
+    expect("x" in root.firstChild).toBeFalsy();
+    expect(root.firstChild.y).toEqual(200);
   });
 });
 
@@ -172,7 +172,7 @@ describe("diffing children", () => {
 
     vdom.render(<ul></ul>);
 
-    expect(root.childNodes[0].childNodes.length).toEqual(0);
+    expect(root.firstChild.childNodes.length).toEqual(0);
   });
 
   test("removing two children", () => {
@@ -188,7 +188,7 @@ describe("diffing children", () => {
 
     vdom.render(<ul></ul>);
 
-    expect(root.childNodes[0].childNodes.length).toEqual(0);
+    expect(root.firstChild.childNodes.length).toEqual(0);
   });
 
   test("removing a middle child", () => {
@@ -210,9 +210,9 @@ describe("diffing children", () => {
       </ul>
     );
 
-    expect(root.childNodes[0].childNodes.length).toEqual(2);
-    expect(root.childNodes[0].childNodes[0].id).toEqual("0");
-    expect(root.childNodes[0].childNodes[1].id).toEqual("2");
+    expect(root.firstChild.childNodes.length).toEqual(2);
+    expect(root.firstChild.childNodes[0].id).toEqual("0");
+    expect(root.firstChild.childNodes[1].id).toEqual("2");
   });
 });
 
@@ -224,7 +224,7 @@ describe("event listeners", () => {
 
     const vdom = new Vdom(root);
     vdom.render(<button onclick={onClick}></button>);
-    root.childNodes[0].click();
+    root.firstChild.click();
 
     expect(onClick).toBeCalledTimes(1);
   });
@@ -239,7 +239,7 @@ describe("event listeners", () => {
     vdom.render(<button onclick={onClick}></button>);
     vdom.render(<button onclick={onClick2}></button>);
 
-    root.childNodes[0].click();
+    root.firstChild.click();
     expect(onClick).toBeCalledTimes(0);
     expect(onClick2).toBeCalledTimes(1);
   });
