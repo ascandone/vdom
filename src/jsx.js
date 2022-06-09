@@ -1,3 +1,7 @@
-export default function jsx(nodeName, props, children) {
-  return { nodeName, props, children };
+export default function jsx(nodeName, props, ...children) {
+  return {
+    nodeName,
+    props: props != null ? props : {},
+    children,
+  };
 }
