@@ -5,41 +5,40 @@ export class Vdom {
     this._root = node;
   }
 
-  _createNode(nodeParent, newVdom) {
-    if (typeof newVdom === "string") {
-      // text node
-      const strNode = document.createTextNode(newVdom);
-
-      // ##PATCH
-      nodeParent.appendChild(strNode);
+  static _newNode(vdom) {
+    if (typeof vdom === "string") {
+      const strNode = document.createTextNode(vdom);
+      return strNode;
     } else {
-      // regular node
-      const node = document.createElement(newVdom.nodeName);
+      const node = document.createElement(vdom.nodeName);
 
-      for (const propName in newVdom.props) {
+      for (const propName in vdom.props) {
         // ##PATCH
-        node[propName] = newVdom.props[propName];
+        node[propName] = vdom.props[propName];
       }
 
-      for (let newIndex = 0; newIndex < newVdom.children.length; newIndex++) {
-        this._renderRec(node, newIndex, undefined, newVdom.children[newIndex]);
+      for (const vchild of vdom.children) {
+        const child = Vdom._newNode(vchild);
+        node.appendChild(child);
       }
 
-      // ##PATCH
-      nodeParent.appendChild(node);
+      return node;
     }
   }
 
   _renderRec(nodeParent, index, lastVdom, newVdom) {
     // Creating new node
     if (lastVdom === undefined && newVdom !== undefined) {
-      this._createNode(nodeParent, newVdom);
+      const node = Vdom._newNode(newVdom);
+      nodeParent.appendChild(node);
     } else if (lastVdom !== undefined && newVdom !== undefined) {
       if (typeof newVdom === "string") {
         // ##PATCH
         nodeParent.childNodes[index].textContent = newVdom;
       } else if (typeof lastVdom === "string" && typeof newVdom !== "string") {
-        throw new Error("TODO from string node to regular node");
+        const newNode = document.createElement(newVdom.nodeName);
+
+        nodeParent.childNodes[index] = newNode;
       } else if (lastVdom.nodeName === newVdom.nodeName) {
         const node = nodeParent.childNodes[index];
         for (const propName in newVdom.props) {

@@ -133,4 +133,15 @@ describe("subsequent renders", () => {
 
     expect(root.childNodes[0].x).toEqual(43);
   });
+
+  test.skip("from text node to regular node", () => {
+    const root = document.createElement("div");
+
+    const vdom = new Vdom(root);
+    vdom.render("first");
+    vdom.render(<div x={43}></div>);
+
+    expect(root.childNodes[0].nodeName).toEqual("DIV");
+    // expect(root.childNodes[0].x).toEqual(43);
+  });
 });
