@@ -22,7 +22,7 @@ describe("initial render", () => {
     expect(root.childNodes[0].nodeName).toEqual("DIV");
   });
 
-  test("simple div with number attributes", () => {
+  test("simple div with number property", () => {
     const root = document.createElement("div");
 
     const vdom = new Vdom(root);
@@ -30,5 +30,15 @@ describe("initial render", () => {
     vdom.render(<div x={42}></div>);
 
     expect(root.childNodes[0]["x"]).toEqual(42);
+  });
+
+  test("simple div with id attribute", () => {
+    const root = document.createElement("div");
+
+    const vdom = new Vdom(root);
+
+    vdom.render(<div id="my-id"></div>);
+
+    expect(root.childNodes[0].getAttribute("id")).toEqual("my-id");
   });
 });
