@@ -159,6 +159,63 @@ describe("subsequent renders", () => {
   });
 });
 
+describe("diffing children", () => {
+  test("removing the only child", () => {
+    const root = document.createElement("div");
+
+    const vdom = new Vdom(root);
+    vdom.render(
+      <ul>
+        <li>first child</li>
+      </ul>
+    );
+
+    vdom.render(<ul></ul>);
+
+    expect(root.childNodes[0].childNodes.length).toEqual(0);
+  });
+
+  test("removing two children", () => {
+    const root = document.createElement("div");
+
+    const vdom = new Vdom(root);
+    vdom.render(
+      <ul>
+        <li>first child</li>
+        <li>second child</li>
+      </ul>
+    );
+
+    vdom.render(<ul></ul>);
+
+    expect(root.childNodes[0].childNodes.length).toEqual(0);
+  });
+
+  test("removing a middle child", () => {
+    const root = document.createElement("div");
+
+    const vdom = new Vdom(root);
+    vdom.render(
+      <ul>
+        <li id="0">first child</li>
+        <li id="1">second child</li>
+        <li id="2">third child</li>
+      </ul>
+    );
+
+    vdom.render(
+      <ul>
+        <li id="0">first child</li>
+        <li id="2">third child</li>
+      </ul>
+    );
+
+    expect(root.childNodes[0].childNodes.length).toEqual(2);
+    expect(root.childNodes[0].childNodes[0].id).toEqual("0");
+    expect(root.childNodes[0].childNodes[1].id).toEqual("2");
+  });
+});
+
 describe("event listeners", () => {
   test("click on btn", () => {
     const root = document.createElement("div");
