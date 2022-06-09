@@ -36,7 +36,8 @@ export class Vdom {
       this._createNode(nodeParent, newVdom);
     } else if (lastVdom !== undefined && newVdom !== undefined) {
       if (typeof lastVdom === "string" && typeof newVdom === "string") {
-        throw new Error("TODO editing string node");
+        // ##PATCH
+        nodeParent.childNodes[index].textContent = newVdom;
       } else if (typeof lastVdom === "string" && typeof newVdom !== "string") {
         throw new Error("TODO from string node to regular node");
       } else if (typeof lastVdom !== "string" && typeof newVdom === "string") {

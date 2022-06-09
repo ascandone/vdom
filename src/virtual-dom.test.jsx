@@ -84,6 +84,16 @@ describe("initial render", () => {
 });
 
 describe("subsequent renders", () => {
+  test("different string nodes", () => {
+    const root = document.createElement("div");
+
+    const vdom = new Vdom(root);
+    vdom.render("first");
+    vdom.render("second");
+
+    expect(root.childNodes[0].textContent).toBe("second");
+  });
+
   test("same node, new property", () => {
     const root = document.createElement("div");
 
