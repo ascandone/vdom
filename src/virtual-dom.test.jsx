@@ -94,6 +94,16 @@ describe("subsequent renders", () => {
     expect(root.childNodes[0].textContent).toBe("second");
   });
 
+  test("from regular node to string node", () => {
+    const root = document.createElement("div");
+
+    const vdom = new Vdom(root);
+    vdom.render(<div>hello world</div>);
+    vdom.render("second");
+
+    expect(root.childNodes[0].textContent).toBe("second");
+  });
+
   test("same node, new property", () => {
     const root = document.createElement("div");
 
