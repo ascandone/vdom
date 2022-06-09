@@ -1,6 +1,7 @@
-import { createApp } from "./create-app";
+import { createApp } from "../create-app";
+
 /** @jsx jsx */
-import jsx from "./jsx";
+import jsx from "../jsx";
 
 function view(state, setState) {
   function handleIncrement() {
