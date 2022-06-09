@@ -12,6 +12,10 @@ function normalizeChild(node) {
 }
 
 export default function jsx(nodeName, props, ...children) {
+  if (typeof nodeName === "function") {
+    return nodeName({ ...props, children });
+  }
+
   return {
     nodeName,
     props: props != null ? props : {},

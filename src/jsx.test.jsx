@@ -64,6 +64,24 @@ test("components", () => {
   });
 });
 
+test("components with props spread", () => {
+  function Btn({ children, ...props }) {
+    return (
+      <button {...props} className="cls">
+        {children}
+      </button>
+    );
+  }
+
+  expect(<Btn id="btn-id">hello</Btn>).toEqual({
+    nodeName: "button",
+    props: {
+      id: "btn-id",
+      className: "cls",
+    },
+    children: ["hello"],
+  });
+});
 test("undefined should render empty text", () => {
   expect(<div>{undefined}</div>).toEqual({
     nodeName: "div",
