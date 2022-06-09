@@ -41,4 +41,14 @@ describe("initial render", () => {
 
     expect(root.childNodes[0].getAttribute("id")).toEqual("my-id");
   });
+
+  test("simple div with text children", () => {
+    const root = document.createElement("div");
+
+    const vdom = new Vdom(root);
+
+    vdom.render(<div>hello</div>);
+
+    expect(root.childNodes[0].childNodes[0].textContent).toEqual("hello");
+  });
 });

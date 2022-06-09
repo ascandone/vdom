@@ -23,6 +23,15 @@ export class Vdom {
           node[propName] = newVdom.props[propName];
         }
 
+        for (let newIndex = 0; newIndex < newVdom.children.length; newIndex++) {
+          this._renderRec(
+            node,
+            newIndex,
+            undefined,
+            newVdom.children[newIndex]
+          );
+        }
+
         // ##PATCH
         nodeParent.appendChild(node);
       }
