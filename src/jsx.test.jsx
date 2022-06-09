@@ -8,6 +8,7 @@ test("misc", () => {
     <div>
       <hr />
       <button>Click me</button>
+      {42}
     </div>
   );
 
@@ -17,6 +18,7 @@ test("misc", () => {
     children: [
       { nodeName: "hr", props: {}, children: [] },
       { nodeName: "button", props: {}, children: ["Click me"] },
+      "42",
     ],
   });
 });
