@@ -68,6 +68,38 @@ describe("initial render", () => {
     expect(root.firstChild.childNodes[1].nodeName).toEqual("HR");
   });
 
+  test("simple div double nested child", () => {
+    const root = document.createElement("div");
+
+    const vdom = new Vdom(root);
+
+    vdom.render(
+      <div>
+        <button>
+          <hr />
+        </button>
+      </div>
+    );
+
+    expect(root.firstChild.firstChild.firstChild.nodeName).toEqual("HR");
+  });
+
+  test("simple div with mixed text and child", () => {
+    const root = document.createElement("div");
+
+    const vdom = new Vdom(root);
+
+    vdom.render(
+      <div>
+        <hr />
+        hello
+      </div>
+    );
+
+    expect(root.firstChild.firstChild.nodeName).toEqual("HR");
+    expect(root.firstChild.childNodes[1].textContent).toEqual("hello");
+  });
+
   test("simple div with child with properties", () => {
     const root = document.createElement("div");
 
