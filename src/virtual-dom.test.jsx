@@ -144,4 +144,16 @@ describe("subsequent renders", () => {
     expect(root.childNodes[0].nodeName).toEqual("DIV");
     expect(root.childNodes[0].x).toEqual(43);
   });
+
+  test("two different nodes", () => {
+    const root = document.createElement("div");
+
+    const vdom = new Vdom(root);
+    vdom.render(<div x={100}></div>);
+    vdom.render(<button y={200}></button>);
+
+    expect(root.childNodes[0].nodeName).toEqual("BUTTON");
+    expect("x" in root.childNodes[0]).toBeFalsy();
+    expect(root.childNodes[0].y).toEqual(200);
+  });
 });

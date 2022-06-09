@@ -54,7 +54,8 @@ export class Vdom {
           }
         }
       } else {
-        throw new Error("TODO diffing different node");
+        const node = Vdom._newNode(newVdom);
+        nodeParent.childNodes[index] = node;
       }
     } else if (lastVdom !== undefined && newVdom === undefined) {
       throw new Error("TODO removing node");
