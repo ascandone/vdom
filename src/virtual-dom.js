@@ -32,8 +32,11 @@ export class Vdom {
 
   _renderRec(nodeParent, index, lastVdom, newVdom) {
     // Creating new node
-    if (lastVdom === undefined && newVdom !== undefined) {
-      this._createNode(nodeParent, newVdom);
+    if (lastVdom === undefined) {
+      if (newVdom !== undefined) {
+        this._createNode(nodeParent, newVdom);
+      }
+      // nothing to do if newVdom === undefined
     }
   }
 
