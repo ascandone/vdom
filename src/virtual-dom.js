@@ -35,7 +35,7 @@ export class Vdom {
     if (lastVdom === undefined && newVdom !== undefined) {
       this._createNode(nodeParent, newVdom);
     } else if (lastVdom !== undefined && newVdom !== undefined) {
-      throw new Error("TODO adding node");
+      throw new Error("TODO editing node");
     } else if (lastVdom !== undefined && newVdom === undefined) {
       throw new Error("TODO removing node");
     }
