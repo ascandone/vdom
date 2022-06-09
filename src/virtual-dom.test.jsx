@@ -1,4 +1,4 @@
-import { test, expect, describe } from "vitest";
+import { test, expect, describe, vi } from "vitest";
 import { Vdom } from "./virtual-dom";
 /** @jsx jsx */
 import jsx from "./jsx";
@@ -156,5 +156,34 @@ describe("subsequent renders", () => {
     expect(root.childNodes[0].nodeName).toEqual("BUTTON");
     expect("x" in root.childNodes[0]).toBeFalsy();
     expect(root.childNodes[0].y).toEqual(200);
+  });
+});
+
+describe("event listeners", () => {
+  test("click on btn", () => {
+    const root = document.createElement("div");
+
+    const onClick = vi.fn();
+
+    const vdom = new Vdom(root);
+    vdom.render(<button onclick={onClick}></button>);
+    root.childNodes[0].click();
+
+    expect(onClick).toBeCalledTimes(1);
+  });
+
+  test("click on btn (subsequent renders)", () => {
+    const root = document.createElement("div");
+
+    const onClick = vi.fn();
+    const onClick2 = vi.fn();
+
+    const vdom = new Vdom(root);
+    vdom.render(<button onclick={onClick}></button>);
+    vdom.render(<button onclick={onClick2}></button>);
+
+    root.childNodes[0].click();
+    expect(onClick).toBeCalledTimes(0);
+    expect(onClick2).toBeCalledTimes(1);
   });
 });
