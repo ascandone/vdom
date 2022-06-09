@@ -51,4 +51,34 @@ describe("initial render", () => {
 
     expect(root.childNodes[0].childNodes[0].textContent).toEqual("hello");
   });
+
+  test("simple div with two children", () => {
+    const root = document.createElement("div");
+
+    const vdom = new Vdom(root);
+
+    vdom.render(
+      <div>
+        <button></button>
+        <hr />
+      </div>
+    );
+
+    expect(root.childNodes[0].childNodes[0].nodeName).toEqual("BUTTON");
+    expect(root.childNodes[0].childNodes[1].nodeName).toEqual("HR");
+  });
+
+  test("simple div with child with properties", () => {
+    const root = document.createElement("div");
+
+    const vdom = new Vdom(root);
+
+    vdom.render(
+      <div>
+        <button x={42}></button>
+      </div>
+    );
+
+    expect(root.childNodes[0].childNodes[0].x).toEqual(42);
+  });
 });
