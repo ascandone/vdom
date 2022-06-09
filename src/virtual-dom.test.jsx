@@ -103,4 +103,14 @@ describe("subsequent renders", () => {
 
     expect("x" in root.childNodes[0]).toBeFalsy();
   });
+
+  test("same node, different property value", () => {
+    const root = document.createElement("div");
+
+    const vdom = new Vdom(root);
+    vdom.render(<div x={42}></div>);
+    vdom.render(<div x={43}></div>);
+
+    expect(root.childNodes[0].x).toEqual(43);
+  });
 });

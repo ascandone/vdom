@@ -52,7 +52,7 @@ export class Vdom {
 
         for (const propName in lastVdom.props) {
           // ##PATCH
-          if (!(propName in newVdom)) {
+          if (!(propName in newVdom.props)) {
             delete node[propName];
           }
         }
