@@ -41,3 +41,25 @@ test("array as children", () => {
     ],
   });
 });
+
+test("components", () => {
+  const Li = ({ children, id }) => <li id={id}>{children}</li>;
+
+  const node = (
+    <ul>
+      <Li>1</Li>
+      <Li>2</Li>
+      <Li>3</Li>
+    </ul>
+  );
+
+  expect(node).toEqual({
+    nodeName: "ul",
+    props: {},
+    children: [
+      { nodeName: "li", props: {}, children: ["1"] },
+      { nodeName: "li", props: {}, children: ["2"] },
+      { nodeName: "li", props: {}, children: ["3"] },
+    ],
+  });
+});

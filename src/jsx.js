@@ -1,5 +1,8 @@
 function normalizeChild(node) {
   if (typeof node === "object" || typeof node === "string") {
+    if (typeof node?.nodeName === "function") {
+      return node.nodeName({ ...node.props, children: node.children });
+    }
     return node;
   } else {
     return node.toString();
