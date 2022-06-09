@@ -29,6 +29,20 @@ function view(state, setState) {
     });
   }
 
+  function handleToggle(id) {
+    setState({
+      todos: state.todos.map((todo) =>
+        todo.id !== id ? todo : { ...todo, completed: !todo.completed }
+      ),
+    });
+  }
+
+  function handleDelete(id) {
+    setState({
+      todos: state.todos.filter((todo) => todo.id !== id),
+    });
+  }
+
   return (
     <div>
       <form onsubmit={handleSubmit}>
@@ -45,7 +59,9 @@ function view(state, setState) {
         ) : (
           state.todos.map((todo) => (
             <li>
-              {todo.text} ({todo.id})
+              {todo.text} (completed: {todo.completed})
+              <button onclick={() => handleToggle(todo.id)}>Toggle</button>
+              <button onclick={() => handleDelete(todo.id)}>Delete</button>
             </li>
           ))
         )}
