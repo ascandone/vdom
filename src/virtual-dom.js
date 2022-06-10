@@ -1,6 +1,6 @@
-export class Vdom {
-  _lastVdom = undefined;
+const lastVdoms = new WeakMap();
 
+export class Vdom {
   constructor(node) {
     this._root = node;
   }
@@ -84,7 +84,8 @@ export class Vdom {
   }
 
   render(newVdom) {
-    this._renderRec(this._root, 0, this._lastVdom, newVdom);
-    this._lastVdom = newVdom;
+    const lastVdom = lastVdoms.get(this._root);
+    this._renderRec(this._root, 0, lastVdom, newVdom);
+    lastVdoms.set(this._root, newVdom);
   }
 }
