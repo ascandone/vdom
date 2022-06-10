@@ -4,6 +4,7 @@ import { Vdom } from "../../virtual-dom";
 import "../../../style.css";
 import store from "./store";
 import { input, submit, toggle, delete_ } from "./reducers/main";
+import memo from "../../memoize-last";
 
 function Btn({ children, ...props }) {
   return (
@@ -15,6 +16,14 @@ function Btn({ children, ...props }) {
     </button>
   );
 }
+
+const Li = memo(({ todo }) => (
+  <li>
+    {todo.text} (completed: {todo.completed})
+    <Btn onclick={() => store.dispatch(toggle(todo.id))}>Toggle</Btn>
+    <Btn onclick={() => store.dispatch(delete_(todo.id))}>Delete</Btn>
+  </li>
+));
 
 function view(state) {
   return (
@@ -40,13 +49,7 @@ function view(state) {
         {state.todos.length === 0 ? (
           <p>No items yet</p>
         ) : (
-          state.todos.map((todo) => (
-            <li>
-              {todo.text} (completed: {todo.completed})
-              <Btn onclick={() => store.dispatch(toggle(todo.id))}>Toggle</Btn>
-              <Btn onclick={() => store.dispatch(delete_(todo.id))}>Delete</Btn>
-            </li>
-          ))
+          state.todos.map((todo) => <Li todo={todo} />)
         )}
       </ul>
     </div>
