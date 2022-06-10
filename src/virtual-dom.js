@@ -1,5 +1,7 @@
 const lastVdoms = new WeakMap();
 
+const specialprops = ["oncreate", "ondelete"];
+
 export class Vdom {
   constructor(node) {
     this._root = node;
@@ -13,6 +15,10 @@ export class Vdom {
       const node = document.createElement(vdom.nodeName);
 
       for (const propName in vdom.props) {
+        if (specialprops.includes(propName)) {
+          continue;
+        }
+
         // ##PATCH
         node[propName] = vdom.props[propName];
       }
@@ -20,6 +26,10 @@ export class Vdom {
       for (const vchild of vdom.children) {
         const child = Vdom._newNode(vchild);
         node.appendChild(child);
+      }
+
+      if (vdom.props.oncreate) {
+        vdom.props?.oncreate();
       }
 
       return node;
@@ -68,6 +78,10 @@ export class Vdom {
       const node = Vdom._newNode(newVdom);
       nodeParent.appendChild(node);
     } else if (lastVdom !== undefined && newVdom === undefined) {
+      if (lastVdom.props.ondelete) {
+        lastVdom.props?.ondelete();
+      }
+
       nodeParent.removeChild(nodeParent.childNodes[index]);
     } else if (lastVdom !== undefined && newVdom !== undefined) {
       if (

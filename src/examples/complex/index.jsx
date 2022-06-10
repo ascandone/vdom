@@ -18,7 +18,14 @@ function Btn({ children, ...props }) {
 }
 
 const Li = memo(({ todo }) => (
-  <li>
+  <li
+    oncreate={() => {
+      console.log("MOUNTING LI", todo);
+    }}
+    ondelete={() => {
+      console.log("REMOVING LI", todo);
+    }}
+  >
     {todo.text} (completed: {todo.completed})
     <Btn onclick={() => store.dispatch(toggle(todo.id))}>Toggle</Btn>
     <Btn onclick={() => store.dispatch(delete_(todo.id))}>Delete</Btn>
