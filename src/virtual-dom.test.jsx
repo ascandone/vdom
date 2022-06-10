@@ -276,3 +276,37 @@ describe("event listeners", () => {
     expect(onClick2).toBeCalledTimes(1);
   });
 });
+
+describe("lifcycle callbacks", () => {
+  test("oncreate", () => {
+    const root = document.createElement("div");
+
+    const oncreate = vi.fn();
+
+    const vdom = new Vdom(root);
+    vdom.render(<div></div>);
+    vdom.render(
+      <div>
+        <div oncreate={oncreate}></div>
+      </div>
+    );
+
+    expect(oncreate).toBeCalledTimes(1);
+  });
+
+  test("ondelete", () => {
+    const root = document.createElement("div");
+
+    const ondelete = vi.fn();
+
+    const vdom = new Vdom(root);
+    vdom.render(
+      <div>
+        <div ondelete={ondelete}></div>
+      </div>
+    );
+    vdom.render(<div></div>);
+
+    expect(ondelete).toBeCalledTimes(1);
+  });
+});
