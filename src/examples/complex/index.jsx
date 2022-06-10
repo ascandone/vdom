@@ -3,7 +3,7 @@ import jsx from "../../jsx";
 import { Vdom } from "../../virtual-dom";
 import "../../../style.css";
 import store from "./store";
-import { input, submit, toggle, delete_ } from "./main-slice";
+import { input, submit, toggle, delete_ } from "./reducers/main";
 
 function Btn({ children, ...props }) {
   return (
