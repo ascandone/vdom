@@ -2,6 +2,69 @@ const lastVdoms = new WeakMap();
 
 const specialprops = ["oncreate", "ondelete"];
 
+class SetProp {
+  constructor(node, propName, newValue) {
+    this.node = node;
+    this.propName = propName;
+    this.newValue = newValue;
+  }
+
+  apply() {
+    this.node[this.propName] = this.newValue;
+  }
+}
+
+class DeleteProp {
+  constructor(node, propName) {
+    this.node = node;
+    this.propName = propName;
+  }
+
+  apply() {
+    delete this.node[this.propName];
+  }
+}
+
+class AppendChild {
+  constructor(nodeParent, newVdom) {
+    this.nodeParent = nodeParent;
+    this.newVdom = newVdom;
+  }
+  apply() {
+    const node = Vdom._newNode(this.newVdom);
+    this.nodeParent.appendChild(node);
+  }
+}
+
+class RemoveChild {
+  constructor(nodeParent, index, onDelete) {
+    this.nodeParent = nodeParent;
+    this.index = index;
+    this.onDelete = onDelete;
+  }
+
+  apply() {
+    if (this.onDelete) {
+      this.onDelete();
+    }
+
+    this.nodeParent.removeChild(this.nodeParent.childNodes[this.index]);
+  }
+}
+
+class ReplaceWith {
+  constructor(nodeParent, index, newVdom) {
+    this.nodeParent = nodeParent;
+    this.index = index;
+    this.newVdom = newVdom;
+  }
+
+  apply() {
+    const node = Vdom._newNode(this.newVdom);
+    this.nodeParent.childNodes[this.index].replaceWith(node);
+  }
+}
+
 export class Vdom {
   constructor(node) {
     this._root = node;
@@ -40,16 +103,14 @@ export class Vdom {
   _renderDiff(nodeParent, index, lastVdom, newVdom) {
     const node = nodeParent.childNodes[index];
     for (const propName in newVdom.props) {
-      // ##PATCH
       if (lastVdom.props[propName] !== newVdom.props[propName]) {
-        node[propName] = newVdom.props[propName];
+        new SetProp(node, propName, newVdom.props[propName]).apply();
       }
     }
 
     for (const propName in lastVdom.props) {
-      // ##PATCH
       if (!(propName in newVdom.props)) {
-        delete node[propName];
+        new DeleteProp(node, propName).apply();
       }
     }
 
@@ -73,24 +134,17 @@ export class Vdom {
       return;
     }
 
-    // Creating new node
     if (lastVdom === undefined && newVdom !== undefined) {
-      const node = Vdom._newNode(newVdom);
-      nodeParent.appendChild(node);
+      new AppendChild(nodeParent, newVdom).apply();
     } else if (lastVdom !== undefined && newVdom === undefined) {
-      if (lastVdom.props.ondelete) {
-        lastVdom.props?.ondelete();
-      }
-
-      nodeParent.removeChild(nodeParent.childNodes[index]);
+      new RemoveChild(nodeParent, index, lastVdom.props.ondelete).apply();
     } else if (lastVdom !== undefined && newVdom !== undefined) {
       if (
         typeof newVdom === "string" ||
         typeof lastVdom === "string" ||
         lastVdom.nodeName !== newVdom.nodeName
       ) {
-        const node = Vdom._newNode(newVdom);
-        nodeParent.childNodes[index].replaceWith(node);
+        new ReplaceWith(nodeParent, index, newVdom).apply();
       } else {
         this._renderDiff(nodeParent, index, lastVdom, newVdom);
       }
