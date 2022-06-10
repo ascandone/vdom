@@ -31,7 +31,7 @@ class AppendChild {
     this.newVdom = newVdom;
   }
   apply() {
-    const node = Vdom._newNode(this.newVdom);
+    const node = createNode(this.newVdom);
     this.nodeParent.appendChild(node);
   }
 }
@@ -60,43 +60,43 @@ class ReplaceWith {
   }
 
   apply() {
-    const node = Vdom._newNode(this.newVdom);
+    const node = createNode(this.newVdom);
     this.nodeParent.childNodes[this.index].replaceWith(node);
+  }
+}
+
+function createNode(vdom) {
+  if (typeof vdom === "string") {
+    const strNode = document.createTextNode(vdom);
+    return strNode;
+  } else {
+    const node = document.createElement(vdom.nodeName);
+
+    for (const propName in vdom.props) {
+      if (specialprops.includes(propName)) {
+        continue;
+      }
+
+      // ##PATCH
+      node[propName] = vdom.props[propName];
+    }
+
+    for (const vchild of vdom.children) {
+      const child = createNode(vchild);
+      node.appendChild(child);
+    }
+
+    if (vdom.props.oncreate) {
+      vdom.props?.oncreate();
+    }
+
+    return node;
   }
 }
 
 export class Vdom {
   constructor(node) {
     this._root = node;
-  }
-
-  static _newNode(vdom) {
-    if (typeof vdom === "string") {
-      const strNode = document.createTextNode(vdom);
-      return strNode;
-    } else {
-      const node = document.createElement(vdom.nodeName);
-
-      for (const propName in vdom.props) {
-        if (specialprops.includes(propName)) {
-          continue;
-        }
-
-        // ##PATCH
-        node[propName] = vdom.props[propName];
-      }
-
-      for (const vchild of vdom.children) {
-        const child = Vdom._newNode(vchild);
-        node.appendChild(child);
-      }
-
-      if (vdom.props.oncreate) {
-        vdom.props?.oncreate();
-      }
-
-      return node;
-    }
   }
 
   // pre: lastVdom.nodeName === newVdom.nodeName
